@@ -94,6 +94,7 @@ class CommParams:
     port: int = 0
     source_address: tuple[str, int] = ("0.0.0.0", 0)
     handle_local_echo: bool = False
+    new_connection_class: Callable[[], ModbusProtocol] = None
 
     # tls
     sslctx: ssl.SSLContext | None = None
@@ -160,14 +161,18 @@ class ModbusProtocol(asyncio.BaseProtocol):
         self.loop: asyncio.AbstractEventLoop = None
         self.recv_buffer: bytes = b""
         self.call_create: Callable[[], Coroutine[Any, Any, Any]] = lambda: None
+        self.unique_id: str = str(id(self))
         if self.is_server:
             self.active_connections: dict[str, ModbusProtocol] = {}
         else:
-            self.listener: ModbusProtocol | None = None
-            self.unique_id: str = str(id(self))
-            self.reconnect_task: asyncio.Task | None = None
-            self.reconnect_delay_current = 0.0
+            self.listener: ModbusProtocol = None
+            self.reconnect_task: asyncio.Task = None
+            self.reconnect_delay_current: float = 0.0
             self.sent_buffer: bytes = b""
+        if not self.comm_params.new_connection_class:
+            self.comm_params.new_connection_class = lambda: ModbusProtocol(
+                self.comm_params, False
+            )
 
         # ModbusProtocol specific setup
         if self.is_server:
@@ -504,7 +509,7 @@ class ModbusProtocol(asyncio.BaseProtocol):
         return f"{self.__class__.__name__}({self.comm_params.comm_name})"
 
 
-class NullModem(asyncio.DatagramTransport, asyncio.Transport):
+class NullModem(asyncio.DatagramTransport, asyncio.BaseTransport):
     """ModbusProtocol layer.
 
     Contains methods to act as a null modem between 2 objects.
