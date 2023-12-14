@@ -22,8 +22,8 @@ def pymodbus_apply_logging_config(
 ):
     """Apply basic logging configuration used by default by Pymodbus maintainers.
 
-    :param level: (optional) set log level, if not set it is inherited.
-    :param log_file_name: (optional) log additional to file
+    :param level: (optional) set log level, if not set it is inherited.     设置日志级别
+    :param log_file_name: (optional) log additional to file     用于将日志写入文件的文件名
 
     Please call this function to format logging appropriately when opening issues.
     """

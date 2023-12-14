@@ -71,7 +71,7 @@ class ModbusClientMixin:  # pylint: disable=too-many-public-methods
         :param address: Start address to read from
         :param count: (optional) Number of coils to read
         :param slave: (optional) Modbus slave ID
-        :param kwargs: (optional) Experimental parameters.
+        :param kwargs: (optional) Experimental parameters.  #   可选的实验性参数，用于传递额外的参数信息
         :raises ModbusException:
         """
         return self.execute(

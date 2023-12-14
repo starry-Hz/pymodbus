@@ -14,30 +14,30 @@ from pymodbus.logging import Log
 from pymodbus.transport import CommType
 from pymodbus.utilities import ModbusTransactionState
 
-
+# 异步
 class AsyncModbusTcpClient(ModbusBaseClient, asyncio.Protocol):
     """**AsyncModbusTcpClient**.
 
     Fixed parameters:
 
-    :param host: Host IP address or host name
+    :param host: Host IP address or host name           #   主机IP
 
     Optional parameters:
 
-    :param port: Port used for communication
-    :param source_address: source address of client
+    :param port: Port used for communication            #   通信的端口
+    :param source_address: source address of client     #   客户端的源地址
 
     Common optional parameters:
 
-    :param framer: Framer enum name
-    :param timeout: Timeout for a request, in seconds.
-    :param retries: Max number of retries per request.
-    :param retry_on_empty: Retry on empty response.
-    :param broadcast_enable: True to treat id 0 as broadcast address.
-    :param reconnect_delay: Minimum delay in seconds.milliseconds before reconnecting.
-    :param reconnect_delay_max: Maximum delay in seconds.milliseconds before reconnecting.
-    :param on_reconnect_callback: Function that will be called just before a reconnection attempt.
-    :param no_resend_on_retry: Do not resend request when retrying due to missing response.
+    :param framer: Framer enum name                     #   成帧器枚举名称
+    :param timeout: Timeout for a request, in seconds.  #   请求超时时间
+    :param retries: Max number of retries per request.  #   每个请求的最大重试次数
+    :param retry_on_empty: Retry on empty response.     #   重试空响应
+    :param broadcast_enable: True to treat id 0 as broadcast address.   #   将id0设为广播地址
+    :param reconnect_delay: Minimum delay in seconds.milliseconds before reconnecting.  #   重新连接之前的最小延迟
+    :param reconnect_delay_max: Maximum delay in seconds.milliseconds before reconnecting.  #   重新连接之前的最大延迟
+    :param on_reconnect_callback: Function that will be called just before a reconnection attempt.  #   在重新连接尝试之前调用的函数
+    :param no_resend_on_retry: Do not resend request when retrying due to missing response. #   由于缺少响应而重试时不重新发送请求
     :param kwargs: Experimental parameters.
 
     Example::
@@ -63,7 +63,7 @@ class AsyncModbusTcpClient(ModbusBaseClient, asyncio.Protocol):
         **kwargs: Any,
     ) -> None:
         """Initialize Asyncio Modbus TCP Client."""
-        asyncio.Protocol.__init__(self)
+        asyncio.Protocol.__init__(self) #   确保正确地初始化异步协议
         if "CommType" not in kwargs:
             kwargs["CommType"] = CommType.TCP
         if source_address:
@@ -90,7 +90,7 @@ class AsyncModbusTcpClient(ModbusBaseClient, asyncio.Protocol):
         """Close connection."""
         super().close(reconnect=reconnect)
 
-
+# 同步
 class ModbusTcpClient(ModbusBaseSyncClient):
     """**ModbusTcpClient**.
 

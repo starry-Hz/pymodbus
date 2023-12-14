@@ -27,7 +27,7 @@ class Framer(str, enum.Enum):
     ASCII = "ascii"
     BINARY = "binary"
     RTU = "rtu"
-    SOCKET = "socket"
+    SOCKET = "socket"   #   modbustcp数据包通过socket进行传输
     TLS = "tls"
 
 
